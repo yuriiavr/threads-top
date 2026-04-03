@@ -32,19 +32,17 @@ export default function WeekPage() {
       title={<>TOP<span className="text-zinc-800">.</span><span className="text-purple-500 font-black">WEEK</span></>}
       periodLabel="Last 7 Days"
       periodIcon={<><Calendar size={11} className="text-purple-600/60" /> Period</>}
-      accentColor="purple"
-      glowColor="purple-950/20"
-      loadingColor="border-t-purple-500"
+      accent="purple"
       loading={loading}
       nav={
         <>
-          <NavLink href="/" icon={<Clock size={16} />} label="Головна" accentColor="purple" />
-          <NavLink href="/hall-of-fame" icon={<Trophy size={16} />} label="Зал слави" accentColor="purple" />
+          <NavLink href="/" icon={<Clock size={16} />} label="Головна" accent="purple" />
+          <NavLink href="/hall-of-fame" icon={<Trophy size={16} />} label="Зал слави" accent="purple" />
         </>
       }
     >
       {posts.map((post, index) => (
-        <PostCard key={post.threads_id} post={post} index={index} accentColor="purple" showDate />
+        <PostCard key={post.threads_id} post={post} index={index} accent="purple" showDate />
       ))}
     </PageLayout>
   );

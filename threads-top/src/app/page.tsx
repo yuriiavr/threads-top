@@ -32,19 +32,17 @@ export default function Home() {
       title={<>TOP<span className="text-zinc-800">.</span><span className="text-cyan-500 font-black">24h</span></>}
       periodLabel="Last 24 Hours"
       periodIcon={<><Sparkles size={11} className="text-cyan-600/60" /> Live Feed</>}
-      accentColor="cyan"
-      glowColor="cyan-950/20"
-      loadingColor="border-t-cyan-500"
+      accent="cyan"
       loading={loading}
       nav={
         <>
-          <NavLink href="/week" icon={<Calendar size={16} />} label="Топ тижня" accentColor="cyan" />
-          <NavLink href="/hall-of-fame" icon={<Trophy size={16} />} label="Зал слави" accentColor="cyan" />
+          <NavLink href="/week" icon={<Calendar size={16} />} label="Топ тижня" accent="cyan" />
+          <NavLink href="/hall-of-fame" icon={<Trophy size={16} />} label="Зал слави" accent="cyan" />
         </>
       }
     >
       {posts.map((post, index) => (
-        <PostCard key={post.threads_id} post={post} index={index} accentColor="cyan" />
+        <PostCard key={post.threads_id} post={post} index={index} accent="cyan" />
       ))}
     </PageLayout>
   );
