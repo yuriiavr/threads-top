@@ -1,0 +1,13 @@
+name: Run Scraper
+on:
+  schedule:
+    - cron: '0 */2 * * *'  # кожні 2 години
+  workflow_dispatch:         
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger scraper
+        run: |
+          curl "${{ secrets.SCRAPER_URL }}/update?secret=${{ secrets.CRON_SECRET }}"
