@@ -1,8 +1,0 @@
-{
-  "crons": [
-    {
-      "path": "/api/update-threads?secret=HARDWORDHARDCODE",
-      "schedule": "0 */6 * * *" 
-    }
-  ]
-}
