@@ -5,7 +5,7 @@ import { TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { ThreadPost, formatCount, daysAgo, cleanCaption, EMOJI_REGEX } from '../lib/utils';
 
-// ─── Apple Emoji ───────────────────────────────────────────────
+// Apple Emoji
 function AppleEmoji({ symbol, alt }: { symbol: string; alt: string }) {
   const codePoint = symbol.codePointAt(0)?.toString(16).toLowerCase();
   if (!codePoint) return null;
@@ -20,7 +20,7 @@ function AppleEmoji({ symbol, alt }: { symbol: string; alt: string }) {
   );
 }
 
-// ─── Caption renderer ──────────────────────────────────────────
+// Caption renderer
 export function renderCaption(text: string) {
   if (!text) return null;
   const parts = cleanCaption(text).split(EMOJI_REGEX);
@@ -31,11 +31,11 @@ export function renderCaption(text: string) {
   );
 }
 
-// ─── Post Card ─────────────────────────────────────────────────
+// Post Card
 interface PostCardProps {
   post: ThreadPost;
   index: number;
-  accentColor: string;       // tailwind color name: 'cyan' | 'purple' | 'amber'
+  accentColor: string;
   showDate?: boolean;
   variant?: 'default' | 'hall';
 }
@@ -53,7 +53,6 @@ export function PostCard({ post, index, accentColor, showDate = false, variant =
       <div className="absolute -inset-px bg-gradient-to-r from-zinc-800/50 to-zinc-900/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
       <div className={`relative p-6 md:p-7 bg-[#080808] border border-zinc-900 rounded-2xl flex gap-6 items-start transition-colors duration-300 group-hover:bg-[#0a0a0a] group-hover:border-zinc-800/80 group-hover:shadow-2xl group-hover:shadow-${accentColor}-500/5`}>
-        {/* Rank / Icon */}
         <div className="flex flex-col items-center pt-1 w-[40px] flex-shrink-0">
           <span className={`text-xl font-bold font-mono text-zinc-800 group-hover:text-${accentColor}-900 transition-colors`}>
             {(index + 1).toString().padStart(2, '0')}
@@ -61,9 +60,7 @@ export function PostCard({ post, index, accentColor, showDate = false, variant =
           <div className="w-px h-full min-h-[50px] mt-2 bg-gradient-to-b from-zinc-900 to-transparent" />
         </div>
 
-        {/* Content */}
         <div className="flex-1 min-w-0">
-          {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className={`w-9 h-9 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover:border-${accentColor}-800/50 transition-colors text-xs font-bold text-zinc-400 group-hover:text-${accentColor}-200 uppercase`}>
@@ -86,12 +83,10 @@ export function PostCard({ post, index, accentColor, showDate = false, variant =
             </div>
           </div>
 
-          {/* Caption */}
           <p className={`${isHall ? 'text-lg md:text-xl font-medium italic' : 'text-[16px] md:text-[17px] font-normal'} leading-[1.65] text-zinc-300 group-hover:text-zinc-100 transition-colors mb-6 break-words`}>
             {isHall && '"'}{renderCaption(post.caption)}{isHall && '"'}
           </p>
 
-          {/* Stats */}
           <div className="flex items-center gap-6 border-t border-zinc-900/80 pt-5">
             <div className="flex items-center gap-2.5 group/stat">
               <Heart size={18} className="text-zinc-700 group-hover/stat:text-red-500 transition-colors" />
@@ -112,7 +107,7 @@ export function PostCard({ post, index, accentColor, showDate = false, variant =
   );
 }
 
-// ─── Nav Link ──────────────────────────────────────────────────
+// Nav Link 
 interface NavLinkProps {
   href: string;
   icon: React.ReactNode;
@@ -132,17 +127,17 @@ export function NavLink({ href, icon, label, accentColor }: NavLinkProps) {
   );
 }
 
-// ─── Page Layout ───────────────────────────────────────────────
+// Page Layout 
 interface PageLayoutProps {
   badge: string;
   title: React.ReactNode;
   periodLabel: string;
   periodIcon: React.ReactNode;
   accentColor: string;
-  glowColor: string;        // e.g. 'cyan-950/20'
+  glowColor: string;        
   nav: React.ReactNode;
   children: React.ReactNode;
-  loadingColor: string;     // e.g. 'border-t-cyan-500'
+  loadingColor: string;
   loading: boolean;
   loadingText?: string;
 }
@@ -154,13 +149,11 @@ export function PageLayout({
 }: PageLayoutProps) {
   return (
     <div className="min-h-screen bg-[#030303] text-zinc-100 font-sans antialiased">
-      {/* Background glow */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className={`absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-${glowColor} blur-[130px] rounded-full`} />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-zinc-900/30 blur-[130px] rounded-full" />
       </div>
 
-      {/* Header */}
       <header className="relative max-w-4xl mx-auto pt-20 pb-12 px-6">
         <div className="flex flex-col gap-8 border-b border-zinc-900/50 pb-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -186,7 +179,6 @@ export function PageLayout({
         </div>
       </header>
 
-      {/* Main */}
       <main className="relative max-w-4xl mx-auto px-6 pb-32">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-40 space-y-6">
@@ -198,7 +190,6 @@ export function PageLayout({
         )}
       </main>
 
-      {/* Footer */}
       <footer className="fixed bottom-6 left-6 pointer-events-none z-50">
         <div className="px-4 py-2 bg-black/80 backdrop-blur-lg border border-zinc-800/50 rounded-full shadow-xl">
           <p className="text-[9px] text-zinc-600 uppercase tracking-[0.4em] font-bold">
