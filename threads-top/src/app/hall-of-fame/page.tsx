@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Trophy, Clock, Calendar } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { ThreadPost } from '../lib/utils';
-import { PageLayout, PostCard, NavLink } from '../components/ui';
+import { PageLayout, PostCard, NavLink, MobileSnapItem } from '../components/ui';
 
 export default function HallOfFame() {
   const [posts, setPosts] = useState<ThreadPost[]>([]);
@@ -40,7 +40,9 @@ export default function HallOfFame() {
       }
     >
       {posts.map((post, index) => (
-        <PostCard key={post.threads_id} post={post} index={index} accent="amber" variant="hall" />
+        <MobileSnapItem key={post.threads_id}>
+          <PostCard post={post} index={index} accent="amber" variant="hall" />
+        </MobileSnapItem>
       ))}
     </PageLayout>
   );

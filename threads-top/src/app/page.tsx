@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { Sparkles, Calendar, Trophy } from 'lucide-react';
-import { supabase } from './lib/supabase';
-import { ThreadPost } from './lib/utils';
-import { PageLayout, PostCard, NavLink } from './components/ui';
+import { useEffect, useState } from "react";
+import { Sparkles, Calendar, Trophy } from "lucide-react";
+import { supabase } from "./lib/supabase";
+import { ThreadPost } from "./lib/utils";
+import { PageLayout, PostCard, NavLink, MobileSnapItem } from "./components/ui";
 
 export default function Home() {
   const [posts, setPosts] = useState<ThreadPost[]>([]);
@@ -12,12 +12,14 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchPosts() {
-      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const yesterday = new Date(
+        Date.now() - 24 * 60 * 60 * 1000,
+      ).toISOString();
       const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .gte('first_seen_at', yesterday)
-        .order('like_count', { ascending: false })
+        .from("posts")
+        .select("*")
+        .gte("first_seen_at", yesterday)
+        .order("like_count", { ascending: false })
         .limit(100);
 
       if (!error && data) setPosts(data as ThreadPost[]);
@@ -29,20 +31,46 @@ export default function Home() {
   return (
     <PageLayout
       badge="Ukraine Trending"
-      title={<>TOP<span className="text-zinc-800">.</span><span className="text-cyan-500 font-black">24h</span></>}
+      title={
+        <>
+          TOP<span className="text-zinc-800">.</span>
+          <span className="text-cyan-500 font-black">24h</span>
+        </>
+      }
       periodLabel="Last 24 Hours"
-      periodIcon={<><Sparkles size={11} className="text-cyan-600/60" /> Live Feed</>}
+      periodIcon={
+        <>
+          <Sparkles size={11} className="text-cyan-600/60" /> Live Feed
+        </>
+      }
       accent="cyan"
       loading={loading}
       nav={
         <>
-          <NavLink href="/week" icon={<Calendar size={16} />} label="Топ тижня" accent="cyan" />
-          <NavLink href="/hall-of-fame" icon={<Trophy size={16} />} label="Зал слави" accent="cyan" />
+          <NavLink
+            href="/week"
+            icon={<Calendar size={16} />}
+            label="Топ тижня"
+            accent="cyan"
+          />
+          <NavLink
+            href="/hall-of-fame"
+            icon={<Trophy size={16} />}
+            label="Зал слави"
+            accent="cyan"
+          />
         </>
       }
     >
       {posts.map((post, index) => (
-        <PostCard key={post.threads_id} post={post} index={index} accent="cyan" />
+        <MobileSnapItem key={post.threads_id}>
+          <PostCard
+            key={post.threads_id}
+            post={post}
+            index={index}
+            accent="cyan"
+          />
+        </MobileSnapItem>
       ))}
     </PageLayout>
   );
