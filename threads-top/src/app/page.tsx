@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sparkles, Calendar, Trophy } from "lucide-react";
+import { Sparkles, Calendar, Trophy, Clock, TrendingUp } from "lucide-react";
 import { supabase } from "./lib/supabase";
 import { ThreadPost } from "./lib/utils";
-import { PageLayout, PostCard, NavLink, MobileSnapItem } from "./components/ui";
+import { PageLayout, PostCard, NavLink, MobileSnapItem, SortControl } from "./components/ui";
 
 export default function Home() {
   const [posts, setPosts] = useState<ThreadPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState<'likes' | 'recent'>('likes');
 
   useEffect(() => {
     async function fetchPosts() {
@@ -28,6 +29,13 @@ export default function Home() {
     fetchPosts();
   }, []);
 
+  const displayedPosts = [...posts].sort((a, b) => {
+    if (sortBy === 'recent') {
+      return new Date(b.first_seen_at || 0).getTime() - new Date(a.first_seen_at || 0).getTime();
+    }
+    return b.like_count - a.like_count;
+  });
+
   return (
     <PageLayout
       badge="Ukraine Trending"
@@ -37,16 +45,22 @@ export default function Home() {
           <span className="text-cyan-500 font-black">24h</span>
         </>
       }
-      periodLabel="Last 24 Hours"
+      periodLabel={sortBy === 'likes' ? "Most Liked Today" : "Newly Added"}
       periodIcon={
-        <>
-          <Sparkles size={11} className="text-cyan-600/60" /> Live Feed
-        </>
+        sortBy === 'likes' 
+          ? <TrendingUp size={12} className="text-cyan-600/60" /> 
+          : <Clock size={12} className="text-cyan-600/60" />
       }
       accent="cyan"
       loading={loading}
       nav={
         <>
+          <SortControl 
+            current={sortBy} 
+            onChange={setSortBy} 
+            accent="cyan" 
+          />
+          
           <NavLink
             href="/week"
             icon={<Calendar size={16} />}
@@ -62,13 +76,14 @@ export default function Home() {
         </>
       }
     >
-      {posts.map((post, index) => (
+      {displayedPosts.map((post, index) => (
         <MobileSnapItem key={post.threads_id}>
           <PostCard
             key={post.threads_id}
             post={post}
             index={index}
             accent="cyan"
+            showDate={sortBy === 'recent'}
           />
         </MobileSnapItem>
       ))}

@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Calendar, Clock, Trophy } from "lucide-react";
+import { Calendar, Clock, Trophy, TrendingUp } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { ThreadPost } from "../lib/utils";
-import { PageLayout, PostCard, NavLink, MobileSnapItem } from "../components/ui";
+import { PageLayout, PostCard, NavLink, MobileSnapItem, SortControl } from "../components/ui";
 
 export default function WeekPage() {
   const [posts, setPosts] = useState<ThreadPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState<'likes' | 'recent'>('likes');
 
   useEffect(() => {
     async function fetchPosts() {
@@ -28,6 +29,13 @@ export default function WeekPage() {
     fetchPosts();
   }, []);
 
+  const displayedPosts = [...posts].sort((a, b) => {
+    if (sortBy === 'recent') {
+      return new Date(b.first_seen_at || 0).getTime() - new Date(a.first_seen_at || 0).getTime();
+    }
+    return b.like_count - a.like_count;
+  });
+
   return (
     <PageLayout
       badge="Ukraine Trending"
@@ -37,16 +45,22 @@ export default function WeekPage() {
           <span className="text-purple-500 font-black">WEEK</span>
         </>
       }
-      periodLabel="Last 7 Days"
+      periodLabel={sortBy === 'likes' ? "Top of the Week" : "Recently Added"}
       periodIcon={
-        <>
-          <Calendar size={11} className="text-purple-600/60" /> Period
-        </>
+        sortBy === 'likes' 
+          ? <TrendingUp size={11} className="text-purple-600/60" /> 
+          : <Calendar size={11} className="text-purple-600/60" />
       }
       accent="purple"
       loading={loading}
       nav={
         <>
+          <SortControl 
+            current={sortBy} 
+            onChange={setSortBy} 
+            accent="purple" 
+          />
+          
           <NavLink
             href="/"
             icon={<Clock size={16} />}
@@ -62,14 +76,14 @@ export default function WeekPage() {
         </>
       }
     >
-      {posts.map((post, index) => (
+      {displayedPosts.map((post, index) => (
         <MobileSnapItem key={post.threads_id}>
           <PostCard
             key={post.threads_id}
             post={post}
             index={index}
             accent="purple"
-            showDate
+            showDate={true}
           />
         </MobileSnapItem>
       ))}
